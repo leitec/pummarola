@@ -35,6 +35,10 @@
    #define json_char char
 #endif
 
+#ifdef macintosh
+#include <libcompat.h>
+#endif
+
 #ifndef json_int_t
    #ifndef _MSC_VER
       #include <inttypes.h>

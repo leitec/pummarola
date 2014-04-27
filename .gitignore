@@ -1,4 +1,6 @@
 polarssl/
+libcompat/
 secrets
 oauth_secrets.h
 *.[oa]
+*~

@@ -39,12 +39,14 @@ static void append_body(struct http_roundtripper* rt, const char* data, int ndat
 
 static void grow_scratch(struct http_roundtripper* rt, int size)
 {
+	int nsize;
+	
     if (rt->nscratch >= size)
         return;
 
     if (size < 64)
         size = 64;
-    int nsize = (rt->nscratch * 3) / 2;
+    nsize = (rt->nscratch * 3) / 2;
     if (nsize < size)
         nsize = size;
 

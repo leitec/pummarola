@@ -4,7 +4,7 @@ EXEC=lp_test
 LIBS=-loauth -lpummarola -ltinyhttp -ljson-parser -lpolarssl -lm -leitec
 CFLAGS+=-I. -Ipolarssl/include
 LDFLAGS=-Llibeitec/ -Lliboauth/ -Llibpummarola/ -Ltinyhttp/ -Ljson-parser -Lpolarssl/library
-OBJECTS=test.o
+OBJECTS=lp_test.o
 
 SUBDIRS=json-parser libeitec liboauth libpummarola tinyhttp
 

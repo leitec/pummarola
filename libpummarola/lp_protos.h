@@ -7,4 +7,5 @@ int send_signed_https_direct (oauth_r_t *oreq, http_response *response);
 int send_signed_https_proxy (oauth_r_t *oreq, http_response *response);
 lph_t * libpummarola_init (const char *oauth_consumer_key, const char *oauth_consumer_secret);
 void libpummarola_destroy (lph_t *handle);
+void json_show (json_value *mjv, int it);
 void get_user_timeline (lph_t *handle, char *user);

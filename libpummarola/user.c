@@ -9,7 +9,9 @@ char error[1024];
 
 #define print_spaces for(i = 0; i < it*2; i++) putchar(' ')
 
-void json_show(json_value *mjv, int it)
+/* PROTO */
+void
+json_show(json_value *mjv, int it)
 {
     int x, i;
 

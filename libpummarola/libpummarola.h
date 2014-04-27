@@ -10,6 +10,10 @@
 
 #include <polarssl/ssl_cache.h>
 
+#ifdef macintosh
+#include <polarssl/net_mactcp.h>
+#endif
+
 #include <json-parser/json.h>
 
 typedef struct libPummarolaHandle {

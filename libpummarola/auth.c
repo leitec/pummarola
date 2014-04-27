@@ -30,10 +30,9 @@ twitter_pin_auth_begin(lph_t *handle)
     oreq.body = NULL;
     oreq.oauth_params = oauth_plist;
     oreq.qstring_params = NULL;
-    oreq.response = &response;
 
     oauth_sign(&oreq);
-    send_signed_https(&oreq);
+    send_signed_https(&oreq, &response);
 
     lc_list_destroy(oauth_plist);
 
@@ -83,10 +82,9 @@ twitter_pin_auth_finish(lph_t *handle, const char *pin)
     oreq.body = NULL;
     oreq.oauth_params = oauth_plist;
     oreq.qstring_params = NULL;
-    oreq.response = &response;
 
     oauth_sign(&oreq);
-    send_signed_https(&oreq);
+    send_signed_https(&oreq, &response);
 
     lc_list_destroy(oauth_plist);
 

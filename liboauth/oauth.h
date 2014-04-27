@@ -25,24 +25,8 @@
 #include <polarssl/certs.h>
 #include <polarssl/havege.h>
 
-#ifdef macintosh
-#include <polarssl/net_mactcp.h>
-#endif
-
 #include "kv.h"
 #include "strl.h"
-
-/*
- * TinyHTTP
- */
-#include <tinyhttp/http.h>
-
-typedef struct HttpResponse {
-    int code;
-    char *body;
-    size_t body_len;
-    lc_list_t header;
-} http_response;
 
 enum {
     OAUTH_SIG_HMAC_SHA1
@@ -75,7 +59,6 @@ typedef struct OAuthRequest {
     lc_list_t body_params;
     lc_list_t oauth_params;
     lc_list_t qstring_params;
-    http_response *response;
 } oauth_r_t;
 
 #include "oauth_protos.h"

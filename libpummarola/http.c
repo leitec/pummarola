@@ -209,7 +209,7 @@ print_query_str(kv_t *i, va_list ap)
 
 /* PROTO */
 int
-send_signed_https(oauth_r_t *oreq)
+send_signed_https_direct(oauth_r_t *oreq, http_response *response)
 {
     int c = 0, m, q_idx, ret, mret = 1, needmore;
 #ifdef macintosh
@@ -304,11 +304,11 @@ send_signed_https(oauth_r_t *oreq)
 
     ret = ssl_write(oreq->ssl, (unsigned char *)request, strlen(request));
 
-    oreq->response->code = 0;
-    oreq->response->body = NULL;
-    oreq->response->header = NULL;
+    response->code = 0;
+    response->body = NULL;
+    response->header = NULL;
 
-    http_init(&rt, responseFuncs, oreq->response);
+    http_init(&rt, responseFuncs, response);
     needmore = 1;
 
     do {
@@ -353,13 +353,16 @@ finish:
     return mret;
 }
 
+#ifdef LP_SSL_PROXY
 /*
- * not useful anymore, since Twitter blocked
- * all non-SSL API calls
+ * Use a proxy that just relays unencrypted HTTP to HTTPS,
+ * using e.g. socat on another machine
+ *
+ * Useful on old 68k Macs where polarssl is a bit too slow
  */
 /* PROTO */
 int
-send_signed_http(oauth_r_t *oreq)
+send_signed_https_proxy(oauth_r_t *oreq, http_response *response)
 {
     int c = 0, m, q_idx, ret, mret = 1, needmore;
 #ifdef macintosh
@@ -420,9 +423,9 @@ send_signed_http(oauth_r_t *oreq)
     strlcat(request, "\n", req_size);
 
 #ifdef macintosh
-    ret = mactcp_connect(&mi, &mc, tptr1, 80);
+    ret = mactcp_connect(&mi, &mc, LP_SSL_PROXY_HOST, LP_SSL_PROXY_PORT);
 #else
-    ret = net_connect(&server_fd, tptr1, 80);
+    ret = net_connect(&server_fd, LP_SSL_PROXY_HOST, LP_SSL_PROXY_PORT);
 #endif
 
     free(murl);
@@ -439,11 +442,11 @@ send_signed_http(oauth_r_t *oreq)
     ret = net_send(&server_fd, (unsigned char *)request, strlen(request));
 #endif
 
-    oreq->response->code = 0;
-    oreq->response->body = NULL;
-    oreq->response->header = NULL;
+    response->code = 0;
+    response->body = NULL;
+    response->header = NULL;
 
-    http_init(&rt, responseFuncs, oreq->response);
+    http_init(&rt, responseFuncs, response);
     needmore = 1;
 
     do {
@@ -495,3 +498,4 @@ finish:
 #endif
     return mret;
 }
+#endif

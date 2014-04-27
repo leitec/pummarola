@@ -1,0 +1,7 @@
+Naming convention:
+
+lc_<library>_<function>
+
+Try to keep <function> in the realm of verbs.
+
+please.

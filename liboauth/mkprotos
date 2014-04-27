@@ -1,0 +1,6 @@
+#!/bin/sh
+
+rm -f oauth_protos.h
+for i in *.c; do
+	sed -n -f ./makeprotos-sed $i >> oauth_protos.h
+done

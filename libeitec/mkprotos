@@ -1,0 +1,6 @@
+#!/bin/sh
+
+rm -f lc_protos.h
+for i in *.c; do
+	sed -n -f ./makeprotos-sed $i >> lc_protos.h
+done

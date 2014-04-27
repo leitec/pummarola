@@ -1,0 +1,18 @@
+# Get prototypes from a .c file
+# $Id: makeprotos-sed,v 1.2 2013-03-06 21:29:47 leitec Exp $
+# /* PROTO */   must be above return type which are above function.
+#		Args are on one line
+# eg.
+# /* PROTO */
+# void                           ------>   void main(int argc, char **argv);
+# main(int argc, char **argv)
+# {
+# }
+#
+/^[/][*] PROTO [*][/]$/{
+n
+N
+s/\n\([_a-zA-Z][_a-zA-Z0-9]* *\)(/ \1 (/
+s/$/;/
+p
+}

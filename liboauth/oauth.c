@@ -42,6 +42,20 @@ oauth_destroy(oauth_s_t *state)
 }
 
 /* PROTO */
+void
+oauth_free(oauth_r_t *req)
+{
+	if(req->body_params)
+		lc_list_destroy(req->body_params);
+	if(req->oauth_params)
+		lc_list_destroy(req->oauth_params);
+	if(req->qstring_params)
+		lc_list_destroy(req->qstring_params);
+	if(req->headers)
+		lc_list_destroy(req->headers);
+}
+
+/* PROTO */
 int
 oauth_set_token(oauth_s_t *s, char *oauth_token, char *oauth_token_secret)
 {

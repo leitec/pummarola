@@ -1,6 +1,3 @@
-void print_oauth_params (kv_t *i, va_list ap);
-void print_extra_params (kv_t *i, va_list ap);
-int send_signed_https (oauth_r_t *oreq);
 kv_t * make_kv_t (char *key, char *value);
 int kv_t_cmp (lc_item_t a, lc_item_t b);
 int kv_t_cmp_i (const char *key, lc_item_t a);
@@ -14,6 +11,7 @@ void final_list_free (lc_item_t i);
 void final_list_iterator (lc_item_t i, va_list ap);
 oauth_s_t * oauth_init (int version, int sig_method, char *oauth_consumer_key, char *oauth_consumer_secret);
 void oauth_destroy (oauth_s_t *state);
+void oauth_free (oauth_r_t *req);
 int oauth_set_token (oauth_s_t *s, char *oauth_token, char *oauth_token_secret);
 void oauth_get_token (oauth_s_t *s, char **oauth_token, char **oauth_token_secret);
 lc_list_t oauth_prepare (oauth_s_t *s);

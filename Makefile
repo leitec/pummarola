@@ -9,6 +9,8 @@ OBJECTS=lp_test.o
 SUBDIRS=json-parser libeitec liboauth libpummarola tinyhttp
 
 all:
+	rm -f $(EXEC)
+
 	for dir in $(SUBDIRS); do \
 		$(MAKE) -C $$dir; \
 	done

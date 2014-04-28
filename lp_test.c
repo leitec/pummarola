@@ -12,7 +12,7 @@ int main(void)
     lph = libpummarola_init(OAUTH_CONSUMER_KEY, OAUTH_CONSUMER_SECRET);
 
     if((f = fopen("secrets", "r")) == NULL) {
-        url = twitter_pin_auth_begin(lph);
+        url = lp_pin_auth_begin(lph);
         if(url) {
             printf("*** visit %s to authorize client ***\n", url);
             free(url);
@@ -21,7 +21,7 @@ int main(void)
         printf("enter PIN: ");
         fflush(stdout);
         if(gets(buf) != NULL) {
-            url = twitter_pin_auth_finish(lph, buf);
+            url = lp_pin_auth_finish(lph, buf);
             if(url) {
                 printf("*** successfully authorized for user '%s' ***\n", url);
                 free(url);
@@ -46,13 +46,17 @@ int main(void)
         fclose(f);
     }
 
+    lp_verify_credentials(lph);
+
+    lp_get_home_timeline(lph);
+
     printf("Enter a twitter ID: ");
     fflush(stdout);
     gets(buf);
 
     printf("\n");
 
-    get_user_timeline(lph, buf);
+    lp_get_user_timeline(lph, buf);
     libpummarola_destroy(lph);
     return 0;
 }

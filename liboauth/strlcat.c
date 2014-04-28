@@ -27,8 +27,7 @@
  * Returns strlen(src) + MIN(siz, strlen(initial dst)).
  * If retval >= siz, truncation occurred.
  */
-size_t
-__openbsd_strlcat(char *dst, const char *src, size_t siz)
+size_t __openbsd_strlcat(char *dst, const char *src, size_t siz)
 {
 	char *d = dst;
 	const char *s = src;
@@ -42,7 +41,7 @@ __openbsd_strlcat(char *dst, const char *src, size_t siz)
 	n = siz - dlen;
 
 	if (n == 0)
-		return(dlen + strlen(s));
+		return (dlen + strlen(s));
 	while (*s != '\0') {
 		if (n != 1) {
 			*d++ = *s;
@@ -52,6 +51,6 @@ __openbsd_strlcat(char *dst, const char *src, size_t siz)
 	}
 	*d = '\0';
 
-	return(dlen + (s - src));	/* count does not include NUL */
+	return (dlen + (s - src));	/* count does not include NUL */
 }
 #endif

@@ -1,1 +1,1 @@
-indent -ut -ts8 -i8 -linux auth.c http.c libpummarola.c libpummarola.h lp_protos.h lp_url.h user.c
+indent -ut -ts8 -i8 -linux *.[ch]

@@ -9,11 +9,10 @@
 		                         ((x & 0x0000FF00) << 8) | \
 		                         ((x & 0x000000FF) << 24))
 
-enum
-{
-    LC_BIG_ENDIAN,
-    LC_LITTLE_ENDIAN,
-    LC_ENDIAN_UNSET
+enum {
+	LC_BIG_ENDIAN,
+	LC_LITTLE_ENDIAN,
+	LC_ENDIAN_UNSET
 };
 
 #endif

@@ -29,36 +29,36 @@
 #include "strl.h"
 
 enum {
-    OAUTH_SIG_HMAC_SHA1
+	OAUTH_SIG_HMAC_SHA1
 };
 
 enum {
-    OAUTH_VERSION_1_0
+	OAUTH_VERSION_1_0
 };
 
 typedef struct OAuthState {
-    int version;
-    int sig_method;
-    char *oauth_consumer_key;
-    char *oauth_consumer_secret;
+	int version;
+	int sig_method;
+	char *oauth_consumer_key;
+	char *oauth_consumer_secret;
 
-    char *oauth_token;
-    char *oauth_token_secret;
+	char *oauth_token;
+	char *oauth_token_secret;
 
-    char *signing_key;
+	char *signing_key;
 } oauth_s_t;
 
 typedef struct OAuthRequest {
-    oauth_s_t *state;
-    ssl_context *ssl;
-    const char *method;
-    const char *url;
-    const char *accept_types;
-    const char *body;
-    lc_list_t headers;
-    lc_list_t body_params;
-    lc_list_t oauth_params;
-    lc_list_t qstring_params;
+	oauth_s_t *state;
+	ssl_context *ssl;
+	const char *method;
+	const char *url;
+	const char *accept_types;
+	const char *body;
+	lc_list_t headers;
+	lc_list_t body_params;
+	lc_list_t oauth_params;
+	lc_list_t qstring_params;
 } oauth_r_t;
 
 #include "oauth_protos.h"

@@ -22,6 +22,7 @@ twitter_pin_auth_begin(lph_t *handle)
     oauth_plist = oauth_prepare(handle->ostate);
     INSERT_KV_T(oauth_plist, "oauth_callback", "oob");
 
+    memset(&oreq, 0, sizeof(oreq));
     oreq.state = handle->ostate;
     oreq.ssl = &ssl;
     oreq.method = "POST";
@@ -33,8 +34,7 @@ twitter_pin_auth_begin(lph_t *handle)
 
     oauth_sign(&oreq);
     send_signed_https(&oreq, &response);
-
-    lc_list_destroy(oauth_plist);
+    oauth_free(&oreq);
 
     if(response.code == 200) {
         kv_t *t, *ts;
@@ -74,6 +74,7 @@ twitter_pin_auth_finish(lph_t *handle, const char *pin)
     oauth_plist = oauth_prepare(handle->ostate);
     INSERT_KV_T(oauth_plist, (char *)"oauth_verifier", (char *)pin);
 
+    memset(&oreq, 0, sizeof(oreq));
     oreq.state = handle->ostate;
     oreq.ssl = &ssl;
     oreq.method = "POST";
@@ -85,8 +86,7 @@ twitter_pin_auth_finish(lph_t *handle, const char *pin)
 
     oauth_sign(&oreq);
     send_signed_https(&oreq, &response);
-
-    lc_list_destroy(oauth_plist);
+    oauth_free(&oreq);
 
     if(response.code == 200) {
         kv_t *t, *ts, *sn, *uid;

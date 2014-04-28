@@ -74,6 +74,7 @@ get_user_timeline(lph_t *handle, char *user)
     INSERT_KV_T(qstring_plist, "count", "5");
     INSERT_KV_T(qstring_plist, "include_rts", "true");
 
+    memset(&oreq, 0, sizeof(oreq));
     oreq.state = handle->ostate;
     oreq.ssl = &ssl;
     oreq.method = "GET";

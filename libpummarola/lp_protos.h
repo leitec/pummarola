@@ -1,5 +1,6 @@
-char * twitter_pin_auth_begin (lph_t *handle);
-char * twitter_pin_auth_finish (lph_t *handle, const char *pin);
+char * lp_pin_auth_begin (lph_t *handle);
+char * lp_pin_auth_finish (lph_t *handle, const char *pin);
+void lp_verify_credentials (lph_t *handle);
 void print_oauth_params (kv_t *i, va_list ap);
 void print_extra_params (kv_t *i, va_list ap);
 void print_query_str (kv_t *i, va_list ap);
@@ -8,4 +9,5 @@ int send_signed_https_proxy (oauth_r_t *oreq, http_response *response);
 lph_t * libpummarola_init (const char *oauth_consumer_key, const char *oauth_consumer_secret);
 void libpummarola_destroy (lph_t *handle);
 void json_show (json_value *mjv, int it);
-void get_user_timeline (lph_t *handle, char *user);
+void lp_get_user_timeline (lph_t *handle, char *user);
+void lp_get_home_timeline (lph_t *handle);

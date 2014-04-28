@@ -49,5 +49,7 @@ typedef struct HttpResponse {
 #define send_signed_https send_signed_https_direct
 #endif
 
+#include "lp_url.h"
+
 #include "lp_protos.h"
 #endif

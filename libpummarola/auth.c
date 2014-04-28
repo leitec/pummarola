@@ -1,18 +1,15 @@
 #include "libpummarola.h"
 
-#define REQUEST_TOKEN_URL "https://api.twitter.com/oauth/request_token"
-#define AUTHORIZE_URL "https://api.twitter.com/oauth/authorize"
-#define ACCESS_TOKEN_URL "https://api.twitter.com/oauth/access_token"
-
 extern oauth_r_t oreq;
 #ifdef LP_SSL
 extern ssl_context ssl;
 #endif
 
+extern char error[1024];
 
 /* PROTO */
 char *
-twitter_pin_auth_begin(lph_t *handle)
+lp_pin_auth_begin(lph_t *handle)
 {
     lc_list_t oauth_plist, qstring_plist;
     http_response response;
@@ -65,7 +62,7 @@ twitter_pin_auth_begin(lph_t *handle)
 
 /* PROTO */
 char *
-twitter_pin_auth_finish(lph_t *handle, const char *pin)
+lp_pin_auth_finish(lph_t *handle, const char *pin)
 {
     lc_list_t oauth_plist, qstring_plist;
     http_response response;
@@ -117,3 +114,63 @@ twitter_pin_auth_finish(lph_t *handle, const char *pin)
 
     return retname;
 }    
+
+/* PROTO */
+void
+lp_verify_credentials(lph_t *handle)
+{
+    lc_list_t oauth_plist;
+    http_response response;
+    json_settings settings = { 0 };
+
+    json_value *jv;
+    int i;
+
+    char *user_name = NULL;
+    char *user_sn = NULL;
+
+    oauth_plist = oauth_prepare(handle->ostate);
+
+    memset(&oreq, 0, sizeof(oreq));
+    oreq.state = handle->ostate;
+    oreq.ssl = &ssl;
+    oreq.method = "GET";
+    oreq.url = VERIFY_CREDS_URL;
+    oreq.accept_types = "*/*";
+    oreq.body = NULL;
+    oreq.oauth_params = oauth_plist;
+    oreq.qstring_params = NULL;
+
+    oauth_sign(&oreq);
+    send_signed_https(&oreq, &response);
+    oauth_free(&oreq);
+    jv = json_parse_ex(&settings, response.body, response.body_len, error);
+    free(response.body);
+    lc_list_destroy(response.header);
+
+   	if(jv == 0) {
+		printf("parse failed: %s\n", error);
+		goto jexit;
+	}
+    if(jv->type != json_object) {
+	    printf("error: expecting object, got %d\n", jv->type);
+	    goto jexit;
+    }
+
+    for(i = 0; i < jv->u.object.length; i++) {
+	    char *toname = jv->u.object.values[i].name;
+	    json_value *tojv = jv->u.object.values[i].value;
+
+	    if(strcmp(toname, "name") == 0)
+		    user_name = tojv->u.string.ptr;
+
+	    if(strcmp(toname, "screen_name") == 0)
+		    user_sn = tojv->u.string.ptr;
+    }
+
+    if(user_name && user_sn)
+	    printf("\nPummarola: running as %s (@%s)\n\n", user_name, user_sn);
+
+jexit:
+    json_value_free(jv);
+}

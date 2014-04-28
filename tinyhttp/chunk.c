@@ -24,6 +24,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "chunk.h"
+
 static const unsigned char http_chunk_state[] = {
 /*     *    LF    CR    HEX */
     0xC1, 0xC1, 0xC1,    1, /* s0: initial hex char */

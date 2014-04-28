@@ -293,14 +293,20 @@ send_signed_https_direct(oauth_r_t *oreq, http_response *response)
                      net_send, &server_fd);
 #endif
 
+#ifdef HTTP_DEBUG
 	printf("Handshake init\n");
+#endif
+
     ret = ssl_handshake(oreq->ssl);
     if(ret != 0) {
         printf("SSL handshake failed\n");
         mret = 0;
         goto finish;
     }
+
+#ifdef HTTP_DEBUG
     printf("\nHandshake finish\n");
+#endif 
 
     ret = ssl_write(oreq->ssl, (unsigned char *)request, strlen(request));
 

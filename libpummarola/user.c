@@ -85,8 +85,7 @@ get_user_timeline(lph_t *handle, char *user)
 
     oauth_sign(&oreq);
     ret = send_signed_https(&oreq, &response);
-    lc_list_destroy(oauth_plist);
-    lc_list_destroy(qstring_plist);
+    oauth_free(&oreq);
 
 	if(ret == 0) {
 		printf("HTTP send failed\n");

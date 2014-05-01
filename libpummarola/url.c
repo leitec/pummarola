@@ -41,7 +41,6 @@
  * to skip most error handling, since this is intended
  * for a library not really taking user input.
  */
-#define CHAR_TYPES_START 6
 enum {
 	protocol_end,
 	hostname_end,
@@ -57,6 +56,8 @@ enum {
 	invalid_char,
 	ignore_char
 };
+
+#define CHAR_TYPES_START protocol_char
 
 /*
  * The lower nybble contains the new state. The higher

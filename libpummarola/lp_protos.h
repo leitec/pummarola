@@ -14,3 +14,4 @@ void lp_get_user_timeline(lph_t * handle, char *user);
 void lp_get_home_timeline(lph_t * handle);
 int url_parse(const char *url, url_t * components);
 void url_free(url_t *);
+int url_char(uint8_t * state, const char ch);

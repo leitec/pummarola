@@ -18,7 +18,6 @@ int main(void)
 	char *url, *token, *token_secret;
 	char buf[256];
 	FILE *f;
-	int num;
 	lc_list_t tweets;
 
 	lph = libpummarola_init(OAUTH_CONSUMER_KEY, OAUTH_CONSUMER_SECRET);

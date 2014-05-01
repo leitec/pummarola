@@ -51,7 +51,8 @@ lp_get_user_timeline(lph_t * handle, char *user)
 		return;
 	}
 
-	printf("Response: %d\n", response.code);
+	if(response.code != 200)
+		return;
 
 	jv = json_parse_ex(&settings, response.body, response.body_len, error);
 	free(response.body);
@@ -134,7 +135,8 @@ lp_get_home_timeline(lph_t * handle)
 		return;
 	}
 
-	printf("Response: %d\n", response.code);
+	if(response.code != 200)
+		goto error;
 
 	jv = json_parse_ex(&settings, response.body, response.body_len, error);
 	free(response.body);
@@ -173,4 +175,6 @@ lp_get_home_timeline(lph_t * handle)
 
  jexit:
 	json_value_free(jv);
+ error:
+	return;
 }

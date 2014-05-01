@@ -139,17 +139,20 @@ void lp_verify_credentials(lph_t * handle)
 	oauth_sign(&oreq);
 	send_signed_https(&oreq, &response);
 	oauth_free(&oreq);
-	jv = json_parse_ex(&settings, response.body, response.body_len, error);
-	free(response.body);
-	lc_list_destroy(response.header);
 
-	if (jv == 0) {
-		printf("parse failed: %s\n", error);
-		goto jexit;
+	if(response.code == 200) {
+		jv = json_parse_ex(&settings, response.body, response.body_len, error);
+		free(response.body);
+		lc_list_destroy(response.header);
+
+		if (jv == NULL) {
+			printf("parse failed: %s\n", error);
+			goto jexit;
+		}
+
+		handle->name = strdup(jv_obj_key_str(jv, "name"));
+		handle->screen_name = strdup(jv_obj_key_str(jv, "screen_name"));
 	}
-
-	handle->name = strdup(jv_obj_key_str(jv, "name"));
-	handle->screen_name = strdup(jv_obj_key_str(jv, "screen_name"));
 
  jexit:
 	json_value_free(jv);

@@ -212,39 +212,37 @@ void print_query_str(kv_t * i, va_list ap)
 int send_signed_https_direct(oauth_r_t * oreq, http_response * response)
 {
 	int c = 0, m, q_idx, ret, mret = 1, needmore;
+	struct http_roundtripper rt;
+	size_t req_size, len, req_pos;
+	char request[8192];
 #ifdef macintosh
 	mactcp_conn mc;
 #else
 	int server_fd;
 #endif
-
-	char *tptr1, *tptr2, *murl;
-	char request[8192];
-	size_t req_size, len, req_pos;
-
-	struct http_roundtripper rt;
-
-	ssl_session_reset(oreq->ssl);
+	uint16_t port;
+	url_t murl = { 0 };
 
 	req_size = sizeof(request);
 
-	/*
-	 * well, this is _one_ way to parse an URL
-	 *
-	 * XXX need to add support for port numbers and protocol
-	 */
-	murl = strdup(oreq->url);
+	url_parse(oreq->url, &murl);
 
-	tptr1 = strstr(murl, "://") + 3;
-	tptr2 = strchr(tptr1, '/');
+	snprintf(request, req_size, "%s /%s", oreq->method, murl.path);
+	if (murl.query_string) {
+		strlcat(request, murl.query_string, req_size);
 
-	snprintf(request, req_size, "%s %s", oreq->method, tptr2);
-	if (oreq->qstring_params) {
+		/*
+		 * the '?' has already been added, so use
+		 * '&' from now on 
+		 */
+		q_idx = 1;
+	} else
 		q_idx = 0;
+
+	if (oreq->qstring_params)
 		lc_list_foreach_v(oreq->qstring_params,
 				  (lc_foreachfn_v_t) print_query_str,
 				  request, req_size, &q_idx);
-	}
 
 	req_pos = strlen(request);
 
@@ -252,8 +250,7 @@ int send_signed_https_direct(oauth_r_t * oreq, http_response * response)
 		 "Content-Length: %lu\nHost: ",
 		 ((oreq->body != NULL) ? strlen(oreq->body) : 0L));
 
-	*tptr2 = 0;
-	strlcat(request, tptr1, req_size);
+	strlcat(request, murl.hostname, req_size);
 	strlcat(request, "\nAccept: ", req_size);
 	strlcat(request, oreq->accept_types, req_size);
 	strlcat(request, "\nConnection: close\n"
@@ -271,19 +268,30 @@ int send_signed_https_direct(oauth_r_t * oreq, http_response * response)
 
 	strlcat(request, "\n", req_size);
 
+	if (murl.port)
+		port = murl.port;
+	else {
+		if (strcmp(murl.protocol, "https") == 0)
+			port = 443;
+		else
+			port = 80;
+	}
+
 #ifdef macintosh
-	ret = mactcp_connect(&mi, &mc, tptr1, 443);
+	ret = mactcp_connect(&mi, &mc, murl.hostname, port);
 #else
-	ret = net_connect(&server_fd, tptr1, 443);
+	ret = net_connect(&server_fd, murl.hostname, port);
 #endif
 
-	free(murl);
+	url_free(&murl);
 
 	if (ret != 0) {
 		printf("could not connect\n");
 		mret = 0;
 		goto finish;
 	}
+
+	ssl_session_reset(oreq->ssl);
 #ifdef macintosh
 	ssl_set_bio(oreq->ssl, mactcp_recv, &mc, mactcp_send, &mc);
 #else

@@ -9,3 +9,11 @@
 /* user related */
 #define USER_TIMELINE_URL API_URL_BASE "/1.1/statuses/user_timeline.json"
 #define HOME_TIMELINE_URL API_URL_BASE "/1.1/statuses/home_timeline.json"
+
+typedef struct _url {
+	char *protocol;
+	char *hostname;
+	uint16_t port;
+	char *path;
+	char *query_string;
+} url_t;

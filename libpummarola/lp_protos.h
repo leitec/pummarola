@@ -12,3 +12,5 @@ void libpummarola_destroy(lph_t * handle);
 void json_show(json_value * mjv, int it);
 void lp_get_user_timeline(lph_t * handle, char *user);
 void lp_get_home_timeline(lph_t * handle);
+int url_parse(const char *url, url_t * components);
+void url_free(url_t *);

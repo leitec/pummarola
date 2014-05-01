@@ -228,7 +228,7 @@ int send_signed_https_direct(oauth_r_t * oreq, http_response * response)
 	url_parse(oreq->url, &murl);
 
 	snprintf(request, req_size, "%s /%s", oreq->method, murl.path);
-	if(murl.query_string) {
+	if (murl.query_string) {
 		strlcat(request, murl.query_string, req_size);
 
 		/*
@@ -268,10 +268,10 @@ int send_signed_https_direct(oauth_r_t * oreq, http_response * response)
 
 	strlcat(request, "\n", req_size);
 
-	if(murl.port)
+	if (murl.port)
 		port = murl.port;
 	else {
-		if(strcmp(murl.protocol, "https") == 0)
+		if (strcmp(murl.protocol, "https") == 0)
 			port = 443;
 		else
 			port = 80;

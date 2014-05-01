@@ -139,8 +139,7 @@ int url_char(uint8_t * state, const char ch)
 }
 
 /* PROTO */
-int
-url_parse(const char *url, url_t * components)
+int url_parse(const char *url, url_t * components)
 {
 	size_t bsize, len;
 	uint8_t state = 0;
@@ -204,8 +203,7 @@ url_parse(const char *url, url_t * components)
 }
 
 /* PROTO */
-void
-url_free(url_t * url)
+void url_free(url_t * url)
 {
 	if (url->protocol)
 		free(url->protocol);

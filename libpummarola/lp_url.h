@@ -17,5 +17,3 @@ typedef struct _url {
 	char *path;
 	char *query_string;
 } url_t;
-
-

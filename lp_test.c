@@ -2,12 +2,24 @@
 
 #include "oauth_secrets.h"
 
+void
+print_tweet(lc_item_t item)
+{
+	tweet_t *t = (tweet_t *)item;
+	printf("\n%s\t%s\n\n%s\n\n",
+			t->name,
+			t->date,
+			t->text);
+}
+
 int main(void)
 {
 	lph_t *lph;
 	char *url, *token, *token_secret;
 	char buf[256];
 	FILE *f;
+	int num;
+	lc_list_t tweets;
 
 	lph = libpummarola_init(OAUTH_CONSUMER_KEY, OAUTH_CONSUMER_SECRET);
 
@@ -54,7 +66,10 @@ int main(void)
 		printf("\nPummarola: running as %s (@%s)\n\n",
 				lph->name, lph->screen_name);
 
-	lp_get_home_timeline(lph);
+	lp_get_home_timeline(lph, &tweets);
+
+	lc_list_foreach(tweets, (lc_foreachfn_t)print_tweet);
+	lc_list_destroy(tweets);
 
 	printf("Enter a twitter ID: ");
 	fflush(stdout);

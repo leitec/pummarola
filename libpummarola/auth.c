@@ -140,8 +140,9 @@ void lp_verify_credentials(lph_t * handle)
 	send_signed_https(&oreq, &response);
 	oauth_free(&oreq);
 
-	if(response.code == 200) {
-		jv = json_parse_ex(&settings, response.body, response.body_len, error);
+	if (response.code == 200) {
+		jv = json_parse_ex(&settings, response.body, response.body_len,
+				   error);
 		free(response.body);
 		lc_list_destroy(response.header);
 

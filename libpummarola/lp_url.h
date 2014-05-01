@@ -10,6 +10,8 @@
 #define USER_TIMELINE_URL API_URL_BASE "/1.1/statuses/user_timeline.json"
 #define HOME_TIMELINE_URL API_URL_BASE "/1.1/statuses/home_timeline.json"
 
+/* stuff for parsing URLs */
+
 typedef struct _url {
 	char *protocol;
 	char *hostname;

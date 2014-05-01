@@ -11,9 +11,11 @@ lph_t *libpummarola_init(const char *oauth_consumer_key,
 void libpummarola_destroy(lph_t * handle);
 void json_show(json_value * mjv, int it);
 void lp_get_user_timeline(lph_t * handle, char *user);
-void lp_get_home_timeline(lph_t * handle);
 int url_parse(const char *url, url_t * components);
 void url_free(url_t *);
 int url_char(uint8_t * state, const char ch);
-json_value * jv_obj_key(json_value *jv, const char *key);
-char * jv_obj_key_str(json_value *jv, const char *key);
+json_value *jv_obj_key(json_value * jv, const char *key);
+char *jv_obj_key_str(json_value * jv, const char *key);
+int lp_tweet_get(json_value *obj, tweet_t *tweet);
+void lp_tweet_free(tweet_t *tw);
+void lp_get_home_timeline(lph_t * handle, lc_list_t *tweetlist);

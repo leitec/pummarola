@@ -5,8 +5,7 @@ extern char error[1024];
 #define print_spaces for(i = 0; i < it*2; i++) putchar(' ')
 
 /* PROTO */
-void
-json_show(json_value * mjv, int it)
+void json_show(json_value * mjv, int it)
 {
 	int x, i;
 
@@ -56,28 +55,26 @@ json_show(json_value * mjv, int it)
 }
 
 /* PROTO */
-json_value *
-jv_obj_key(json_value *jv, const char *key)
+json_value *jv_obj_key(json_value * jv, const char *key)
 {
 	int i;
 
-	if(jv->type != json_object)
+	if (jv->type != json_object)
 		return NULL;
 
-	for(i = 0; i < jv->u.object.length; i++)
-		if(strcmp(jv->u.object.values[i].name, key) == 0)
+	for (i = 0; i < jv->u.object.length; i++)
+		if (strcmp(jv->u.object.values[i].name, key) == 0)
 			return jv->u.object.values[i].value;
 
 	return NULL;
 }
 
 /* PROTO */
-char *
-jv_obj_key_str(json_value *jv, const char *key)
+char *jv_obj_key_str(json_value * jv, const char *key)
 {
 	json_value *jo = jv_obj_key(jv, key);
 
-	if(jo)
+	if (jo)
 		return jo->u.string.ptr;
 	else
 		return NULL;

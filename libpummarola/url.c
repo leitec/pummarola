@@ -69,12 +69,14 @@ enum {
  * 		the type of value is ambiguous
  * 		(i.e. we get to the same state
  * 		 from multiple previous states)
+ *  	8	a character to save (i.e. write to
+ *  		buffer)
  *
- *  The "lookahead" is not really that, it's checking
- *  the character after an initial ':' to see if we
- *  are starting the '://' block, going into sepA and B,
- *  or starting the port number. These are the xx_end_yy_begin
- *  return values above.
+ * The "lookahead" is not really that, it's checking
+ * the character after an initial ':' to see if we
+ * are starting the '://' block, going into sepA and B,
+ * or starting the port number. These are the xx_end_yy_begin
+ * return values above.
  */
 uint8_t state_table[] = {
 	/* all   int   ':'   '/'   '?'   '\0'  PAD   PAD  */

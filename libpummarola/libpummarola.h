@@ -31,6 +31,13 @@ typedef struct libPummarolaHandle {
 	int user_id;
 } lph_t;
 
+typedef struct libPummarolaTweet {
+	char *name;
+	char *screen_name;
+	char *text;
+	char *date;
+} tweet_t;
+
 /*
  * TinyHTTP
  */

@@ -8,8 +8,7 @@ extern ssl_context ssl;
 char error[1024];
 
 /* PROTO */
-void
-lp_get_user_timeline(lph_t * handle, char *user)
+void lp_get_user_timeline(lph_t * handle, char *user)
 {
 	lc_list_t oauth_plist;
 	lc_list_t qstring_plist;
@@ -51,7 +50,7 @@ lp_get_user_timeline(lph_t * handle, char *user)
 		return;
 	}
 
-	if(response.code != 200)
+	if (response.code != 200)
 		return;
 
 	jv = json_parse_ex(&settings, response.body, response.body_len, error);
@@ -74,10 +73,10 @@ lp_get_user_timeline(lph_t * handle, char *user)
 		goto jexit;
 	}
 
-	for(i = 0; i < jv->u.array.length; i++) {
+	for (i = 0; i < jv->u.array.length; i++) {
 		curjv = jv->u.array.values[i];
 
-		if((tojv = jv_obj_key(curjv, "user")))
+		if ((tojv = jv_obj_key(curjv, "user")))
 			tweet_user = jv_obj_key_str(tojv, "name");
 
 		tweet_text = jv_obj_key_str(curjv, "text");
@@ -94,20 +93,17 @@ lp_get_user_timeline(lph_t * handle, char *user)
 }
 
 /* PROTO */
-void
-lp_get_home_timeline(lph_t * handle)
+void lp_get_home_timeline(lph_t * handle, lc_list_t *tweetlist)
 {
 	lc_list_t oauth_plist;
 	lc_list_t qstring_plist;
+	lc_list_t twl;
 	http_response response;
 	json_settings settings = { 0 };
 
-	json_value *jv, *curjv, *tojv;
+	json_value *jv, *curjv;
+	tweet_t *tw;
 	int ret, i;
-
-	char *tweet_text;
-	char *tweet_date;
-	char *tweet_user;
 
 	oauth_plist = oauth_prepare(handle->ostate);
 	qstring_plist = lc_list_create((lc_createfn_t) param_list_create,
@@ -135,7 +131,7 @@ lp_get_home_timeline(lph_t * handle)
 		return;
 	}
 
-	if(response.code != 200)
+	if (response.code != 200)
 		goto error;
 
 	jv = json_parse_ex(&settings, response.body, response.body_len, error);
@@ -146,6 +142,9 @@ lp_get_home_timeline(lph_t * handle)
 		printf("parse failed: %s\n", error);
 		goto jexit;
 	}
+
+	twl = lc_list_create((lc_createfn_t)NULL, (lc_destroyfn_t)lp_tweet_free,
+		(lc_comparefn_t)NULL);
 
 	/* 
 	 * parse through a list of tweets.
@@ -158,21 +157,15 @@ lp_get_home_timeline(lph_t * handle)
 		goto jexit;
 	}
 
-	for(i = 0; i < jv->u.array.length; i++) {
+	for (i = 0; i < jv->u.array.length; i++) {
+		tw = malloc(sizeof(tweet_t));
+
 		curjv = jv->u.array.values[i];
-
-		if((tojv = jv_obj_key(curjv, "user")))
-			tweet_user = jv_obj_key_str(tojv, "name");
-
-		tweet_text = jv_obj_key_str(curjv, "text");
-		tweet_date = jv_obj_key_str(curjv, "created_at");
-
-		if (tweet_user && tweet_text && tweet_date) {
-			printf("%s\t%s\n\n%s\n\n", tweet_user,
-			       tweet_date, tweet_text);
-		}
+		lp_tweet_get(curjv, tw);
+		lc_list_insertlast(twl, (lc_item_t)tw);
 	}
 
+	*tweetlist = twl;
  jexit:
 	json_value_free(jv);
  error:

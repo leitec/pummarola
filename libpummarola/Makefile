@@ -2,7 +2,7 @@ include ../config.mk
 
 LIB=libpummarola.a
 RM=rm -f
-OBJECTS=auth.o http.o json.o libpummarola.o url.o user.o
+OBJECTS=auth.o http.o json.o libpummarola.o tweet.o url.o user.o
 
 CFLAGS+=-I.. -I../polarssl/include
 

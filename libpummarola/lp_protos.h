@@ -15,3 +15,5 @@ void lp_get_home_timeline(lph_t * handle);
 int url_parse(const char *url, url_t * components);
 void url_free(url_t *);
 int url_char(uint8_t * state, const char ch);
+json_value * jv_obj_key(json_value *jv, const char *key);
+char * jv_obj_key_str(json_value *jv, const char *key);

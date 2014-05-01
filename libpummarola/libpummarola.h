@@ -27,6 +27,7 @@ typedef struct libPummarolaHandle {
 	oauth_s_t *ostate;
 
 	char *screen_name;
+	char *name;
 	int user_id;
 } lph_t;
 

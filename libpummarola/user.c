@@ -7,68 +7,17 @@ extern ssl_context ssl;
 
 char error[1024];
 
-#define print_spaces for(i = 0; i < it*2; i++) putchar(' ')
-
 /* PROTO */
-void json_show(json_value * mjv, int it)
-{
-	int x, i;
-
-	switch (mjv->type) {
-	case json_object:
-		print_spaces;
-		printf("obj=object, length=%d\n", mjv->u.object.length);
-		for (x = 0; x < mjv->u.object.length; x++) {
-			print_spaces;
-			printf("object num=%d, name='%s'\n", x,
-			       mjv->u.object.values[x].name);
-			json_show(mjv->u.object.values[x].value, it + 1);
-		}
-		break;
-	case json_array:
-		print_spaces;
-		printf("obj=array, length=%d\n", mjv->u.array.length);
-		for (x = 0; x < mjv->u.array.length; x++)
-			json_show(mjv->u.array.values[x], it + 1);
-		break;
-	case json_integer:
-		print_spaces;
-		printf("obj=integer, value=%d\n", mjv->u.integer);
-		break;
-	case json_double:
-		print_spaces;
-		printf("obj=double, value=%lf\n", mjv->u.dbl);
-		break;
-	case json_string:
-		print_spaces;
-		printf("obj=string, len=%d, value='%s'\n",
-		       mjv->u.string.length, mjv->u.string.ptr);
-		break;
-	case json_boolean:
-		print_spaces;
-		printf("obj=bool, value=%d\n", mjv->u.boolean);
-		break;
-	case json_none:
-		print_spaces;
-		printf("obj=none\n");
-		break;
-	case json_null:
-		print_spaces;
-		printf("obj=NULL\n");
-		break;
-	}
-}
-
-/* PROTO */
-void lp_get_user_timeline(lph_t * handle, char *user)
+void
+lp_get_user_timeline(lph_t * handle, char *user)
 {
 	lc_list_t oauth_plist;
 	lc_list_t qstring_plist;
 	http_response response;
 	json_settings settings = { 0 };
 
-	json_value *jv;
-	int ret, i, j, k;
+	json_value *jv, *curjv, *tojv;
+	int ret, i;
 
 	char *tweet_text;
 	char *tweet_date;
@@ -124,36 +73,14 @@ void lp_get_user_timeline(lph_t * handle, char *user)
 		goto jexit;
 	}
 
-	for (i = 0; i < jv->u.array.length; i++) {
-		json_value *tojv = jv->u.array.values[i];
-		tweet_text = NULL;
-		tweet_date = NULL;
-		tweet_user = NULL;
+	for(i = 0; i < jv->u.array.length; i++) {
+		curjv = jv->u.array.values[i];
 
-		for (j = 0; j < tojv->u.object.length; j++) {
-			char *name = tojv->u.object.values[j].name;
-			json_value *ttjv = tojv->u.object.values[j].value;
+		if((tojv = jv_obj_key(curjv, "user")))
+			tweet_user = jv_obj_key_str(tojv, "name");
 
-			if (strcmp(name, "user") == 0) {
-				for (k = 0; k < ttjv->u.object.length; k++) {
-					char *uv_name =
-					    ttjv->u.object.values[k].name;
-					json_value *uv_jv =
-					    ttjv->u.object.values[k].value;
-
-					if (strcmp(uv_name, "name")
-					    == 0) {
-						tweet_user =
-						    uv_jv->u.string.ptr;
-					}
-				}
-			}
-
-			if (strcmp(name, "text") == 0)
-				tweet_text = ttjv->u.string.ptr;
-			if (strcmp(name, "created_at") == 0)
-				tweet_date = ttjv->u.string.ptr;
-		}
+		tweet_text = jv_obj_key_str(curjv, "text");
+		tweet_date = jv_obj_key_str(curjv, "created_at");
 
 		if (tweet_user && tweet_text && tweet_date) {
 			printf("%s\t%s\n\n%s\n\n", tweet_user,
@@ -166,15 +93,16 @@ void lp_get_user_timeline(lph_t * handle, char *user)
 }
 
 /* PROTO */
-void lp_get_home_timeline(lph_t * handle)
+void
+lp_get_home_timeline(lph_t * handle)
 {
 	lc_list_t oauth_plist;
 	lc_list_t qstring_plist;
 	http_response response;
 	json_settings settings = { 0 };
 
-	json_value *jv;
-	int ret, i, j, k;
+	json_value *jv, *curjv, *tojv;
+	int ret, i;
 
 	char *tweet_text;
 	char *tweet_date;
@@ -228,36 +156,14 @@ void lp_get_home_timeline(lph_t * handle)
 		goto jexit;
 	}
 
-	for (i = 0; i < jv->u.array.length; i++) {
-		json_value *tojv = jv->u.array.values[i];
-		tweet_text = NULL;
-		tweet_date = NULL;
-		tweet_user = NULL;
+	for(i = 0; i < jv->u.array.length; i++) {
+		curjv = jv->u.array.values[i];
 
-		for (j = 0; j < tojv->u.object.length; j++) {
-			char *name = tojv->u.object.values[j].name;
-			json_value *ttjv = tojv->u.object.values[j].value;
+		if((tojv = jv_obj_key(curjv, "user")))
+			tweet_user = jv_obj_key_str(tojv, "name");
 
-			if (strcmp(name, "user") == 0) {
-				for (k = 0; k < ttjv->u.object.length; k++) {
-					char *uv_name =
-					    ttjv->u.object.values[k].name;
-					json_value *uv_jv =
-					    ttjv->u.object.values[k].value;
-
-					if (strcmp(uv_name, "name")
-					    == 0) {
-						tweet_user =
-						    uv_jv->u.string.ptr;
-					}
-				}
-			}
-
-			if (strcmp(name, "text") == 0)
-				tweet_text = ttjv->u.string.ptr;
-			if (strcmp(name, "created_at") == 0)
-				tweet_date = ttjv->u.string.ptr;
-		}
+		tweet_text = jv_obj_key_str(curjv, "text");
+		tweet_date = jv_obj_key_str(curjv, "created_at");
 
 		if (tweet_user && tweet_text && tweet_date) {
 			printf("%s\t%s\n\n%s\n\n", tweet_user,

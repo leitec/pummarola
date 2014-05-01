@@ -28,6 +28,7 @@ lph_t *libpummarola_init(const char *oauth_consumer_key,
 	int ret;
 
 	nh = malloc(sizeof(lph_t));
+	memset(nh, 0, sizeof(lph_t));
 
 #ifdef macintosh
 	mactcp_init(&mi);

@@ -50,6 +50,10 @@ int main(void)
 
 	lp_verify_credentials(lph);
 
+	if(lph->name && lph->screen_name)
+		printf("\nPummarola: running as %s (@%s)\n\n",
+				lph->name, lph->screen_name);
+
 	lp_get_home_timeline(lph);
 
 	printf("Enter a twitter ID: ");

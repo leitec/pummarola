@@ -123,10 +123,6 @@ void lp_verify_credentials(lph_t * handle)
 	json_settings settings = { 0 };
 
 	json_value *jv;
-	int i;
-
-	char *user_name = NULL;
-	char *user_sn = NULL;
 
 	oauth_plist = oauth_prepare(handle->ostate);
 
@@ -151,25 +147,9 @@ void lp_verify_credentials(lph_t * handle)
 		printf("parse failed: %s\n", error);
 		goto jexit;
 	}
-	if (jv->type != json_object) {
-		printf("error: expecting object, got %d\n", jv->type);
-		goto jexit;
-	}
 
-	for (i = 0; i < jv->u.object.length; i++) {
-		char *toname = jv->u.object.values[i].name;
-		json_value *tojv = jv->u.object.values[i].value;
-
-		if (strcmp(toname, "name") == 0)
-			user_name = tojv->u.string.ptr;
-
-		if (strcmp(toname, "screen_name") == 0)
-			user_sn = tojv->u.string.ptr;
-	}
-
-	if (user_name && user_sn)
-		printf("\nPummarola: running as %s (@%s)\n\n", user_name,
-		       user_sn);
+	handle->name = strdup(jv_obj_key_str(jv, "name"));
+	handle->screen_name = strdup(jv_obj_key_str(jv, "screen_name"));
 
  jexit:
 	json_value_free(jv);

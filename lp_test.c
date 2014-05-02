@@ -17,6 +17,7 @@ int main(void)
 	char *url, *token, *token_secret;
 	char buf[256];
 	FILE *f;
+	int count = 5;
 	lc_list_t tweets;
 	tweet_t tw;
 
@@ -65,29 +66,29 @@ int main(void)
 		printf("\nPummarola: running as %s (@%s)\n\n",
 				lph->name, lph->screen_name);
 
-	lp_timeline_get_home(lph, &tweets, 5);
+	for(;;) {
+		printf("Pummarola> ");
+		fflush(stdout);
+		gets(buf);
 
-	lc_list_foreach(tweets, (lc_foreachfn_t)print_tweet);
-	lc_list_destroy(tweets);
-
-	printf("Enter a twitter ID: ");
-	fflush(stdout);
-	gets(buf);
-
-	printf("\n");
-
-	lp_timeline_get_user(lph, &tweets, buf, 5);
-	lc_list_foreach(tweets, (lc_foreachfn_t)print_tweet);
-	lc_list_destroy(tweets);
-
-	printf("\n");
-#ifdef macintosh
-	lp_tweet_send(lph, &tw, "This tweet sent from Pummarola for Mac.");
-#else
-	lp_tweet_send(lph, &tw, "This tweet also sent from Pummarola for Linux.");
-#endif
-
-	print_tweet(&tw);
+		if(strncmp(buf, "get ", 4) == 0) {
+			lp_timeline_get_user(lph, &tweets, buf+4, count);
+			lc_list_foreach(tweets,(lc_foreachfn_t)print_tweet);
+			lc_list_destroy(tweets);
+		} else if(strncmp(buf, "home", 4) == 0) {
+			lp_timeline_get_home(lph, &tweets, count);
+			lc_list_foreach(tweets,(lc_foreachfn_t)print_tweet);
+			lc_list_destroy(tweets);
+		} else if(strncmp(buf, "tweet ", 6) == 0) {
+			lp_tweet_send(lph, &tw, buf+6);
+			print_tweet(&tw);
+		} else if(strncmp(buf, "count ", 6) == 0) {
+			count = atoi(buf+6);
+			printf("Count set to %d\n", count);
+		} else if(strncmp(buf, "quit", 4) == 0) {
+			break;
+		}
+	}
 
 	libpummarola_destroy(lph);
 	return 0;

@@ -3,7 +3,7 @@
 #include <string.h>
 
 #define USER_AGENT_STR "User-Agent: Pummarola crappy HTTP 1.0\n"
-#define HTTP_DEBUG
+#undef HTTP_DEBUG
 
 #ifdef macintosh
 extern mactcp_inst mi;

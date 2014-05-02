@@ -2,7 +2,9 @@
 polarssl/
 libcompat/
 secrets
+secrets.*
 oauth_secrets.h
+lp_test
 *.[oa]
 *~
 pummarola-cwp1

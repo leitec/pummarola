@@ -256,12 +256,10 @@ int https_send_direct(oauth_r_t * oreq, http_response * response)
 
 	q_idx = -1;
 	if(oreq->body_params) {
-		printf("have body params\n");
 		body[0] = '\0';
 		lc_list_foreach_v(oreq->body_params,
 				(lc_foreachfn_v_t) print_query_str,
 				body, body_size, &q_idx);
-		printf("%s\n", body);
 		bptr = body;
 	} else if(oreq->body) {
 		bptr = (char *)oreq->body;

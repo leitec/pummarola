@@ -3,9 +3,8 @@
 #include "oauth_secrets.h"
 
 void
-print_tweet(lc_item_t item)
+print_tweet(tweet_t *t)
 {
-	tweet_t *t = (tweet_t *)item;
 	printf("\n%s\t%s\n\n%s\n\n",
 			t->name,
 			t->date,
@@ -19,6 +18,7 @@ int main(void)
 	char buf[256];
 	FILE *f;
 	lc_list_t tweets;
+	tweet_t tw;
 
 	lph = libpummarola_init(OAUTH_CONSUMER_KEY, OAUTH_CONSUMER_SECRET);
 
@@ -79,6 +79,15 @@ int main(void)
 	lp_timeline_get_user(lph, &tweets, buf, 5);
 	lc_list_foreach(tweets, (lc_foreachfn_t)print_tweet);
 	lc_list_destroy(tweets);
+
+	printf("\n");
+#ifdef macintosh
+	lp_tweet_send(lph, &tw, "This tweet sent from Pummarola for Mac.");
+#else
+	lp_tweet_send(lph, &tw, "This tweet also sent from Pummarola for Linux.");
+#endif
+
+	print_tweet(&tw);
 
 	libpummarola_destroy(lph);
 	return 0;

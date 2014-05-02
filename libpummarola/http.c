@@ -3,6 +3,7 @@
 #include <string.h>
 
 #define USER_AGENT_STR "User-Agent: Pummarola crappy HTTP 1.0\n"
+#define HTTP_DEBUG
 
 #ifdef macintosh
 extern mactcp_inst mi;
@@ -173,6 +174,9 @@ void print_extra_params(kv_t * i, va_list ap)
  * has part of a query string, due to the "?" marker
  * being repeated.
  *
+ * -1 means don't print the char at all, as is used
+ *  when doing POST requests.
+ *
  * Parameters (via stdarg)
  *  request - string buffer
  *  req_size - buffer size
@@ -192,10 +196,14 @@ void print_query_str(kv_t * i, va_list ap)
 	va_end(ap2);
 
 	/* see note in comment above */
-	if ((*index)++ == 0)
-		strlcat(request, "?", req_size);
-	else
-		strlcat(request, "&", req_size);
+	if ((*index) == -1) {
+		*index = 1;
+	} else {
+		if ((*index)++ == 0)
+			strlcat(request, "?", req_size);
+		else
+			strlcat(request, "&", req_size);
+	}
 
 	ekey = urlencode((unsigned char *)i->key, strlen(i->key));
 	evalue = urlencode((unsigned char *)i->value, strlen(i->value));
@@ -213,8 +221,9 @@ int https_send_direct(oauth_r_t * oreq, http_response * response)
 {
 	int c = 0, m, q_idx, ret, mret = 1, needmore;
 	struct http_roundtripper rt;
-	size_t req_size, len, req_pos;
+	size_t req_size, body_size, len, req_pos;
 	char request[8192];
+	char body[8192], *bptr = NULL;
 #ifdef macintosh
 	mactcp_conn mc;
 #else
@@ -224,6 +233,7 @@ int https_send_direct(oauth_r_t * oreq, http_response * response)
 	url_t murl = { 0 };
 
 	req_size = sizeof(request);
+	body_size = sizeof(body);
 
 	url_parse(oreq->url, &murl);
 
@@ -244,11 +254,24 @@ int https_send_direct(oauth_r_t * oreq, http_response * response)
 				  (lc_foreachfn_v_t) print_query_str,
 				  request, req_size, &q_idx);
 
+	q_idx = -1;
+	if(oreq->body_params) {
+		printf("have body params\n");
+		body[0] = '\0';
+		lc_list_foreach_v(oreq->body_params,
+				(lc_foreachfn_v_t) print_query_str,
+				body, body_size, &q_idx);
+		printf("%s\n", body);
+		bptr = body;
+	} else if(oreq->body) {
+		bptr = (char *)oreq->body;
+	}
+
 	req_pos = strlen(request);
 
 	snprintf(request + req_pos, req_size - req_pos, " HTTP/1.1\n"
 		 "Content-Length: %lu\nHost: ",
-		 ((oreq->body != NULL) ? strlen(oreq->body) : 0L));
+		 ((bptr != NULL) ? strlen(bptr) : 0L));
 
 	strlcat(request, murl.hostname, req_size);
 	strlcat(request, "\nAccept: ", req_size);
@@ -267,6 +290,8 @@ int https_send_direct(oauth_r_t * oreq, http_response * response)
 #endif
 
 	strlcat(request, "\n", req_size);
+	if(bptr)
+		strlcat(request, bptr, req_size);
 
 	if (murl.port)
 		port = murl.port;

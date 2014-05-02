@@ -81,7 +81,7 @@ int lp_timeline_get(lph_t * handle, lc_list_t *tweetlist, char *user, int count,
 		goto jexit;
 	}
 
-	twl = lc_list_create((lc_createfn_t)NULL, (lc_destroyfn_t)lp_tweet_free,
+	twl = lc_list_create((lc_createfn_t)NULL, (lc_destroyfn_t)lpi_tweet_free,
 		(lc_comparefn_t)NULL);
 
 	/* 
@@ -97,7 +97,7 @@ int lp_timeline_get(lph_t * handle, lc_list_t *tweetlist, char *user, int count,
 
 	for (i = 0; i < jv->u.array.length; i++) {
 		tw = malloc(sizeof(tweet_t));
-		lp_tweet_get(jv->u.array.values[i], tw);
+		lpi_tweet_get(jv->u.array.values[i], tw);
 		lc_list_insertlast(twl, (lc_item_t)tw);
 	}
 

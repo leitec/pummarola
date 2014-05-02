@@ -10,6 +10,9 @@
 #define USER_TIMELINE_URL API_URL_BASE "/1.1/statuses/user_timeline.json"
 #define HOME_TIMELINE_URL API_URL_BASE "/1.1/statuses/home_timeline.json"
 
+/* tweeting */
+#define STATUS_UPDATE_URL API_URL_BASE "/1.1/statuses/update.json"
+
 /* stuff for parsing URLs */
 
 typedef struct _url {

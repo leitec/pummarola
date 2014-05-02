@@ -209,7 +209,7 @@ void print_query_str(kv_t * i, va_list ap)
 }
 
 /* PROTO */
-int send_signed_https_direct(oauth_r_t * oreq, http_response * response)
+int https_send_direct(oauth_r_t * oreq, http_response * response)
 {
 	int c = 0, m, q_idx, ret, mret = 1, needmore;
 	struct http_roundtripper rt;
@@ -372,7 +372,7 @@ int send_signed_https_direct(oauth_r_t * oreq, http_response * response)
  * Useful on old 68k Macs where polarssl is a bit too slow
  */
 /* PROTO */
-int send_signed_https_proxy(oauth_r_t * oreq, http_response * response)
+int https_send_proxy(oauth_r_t * oreq, http_response * response)
 {
 	int c = 0, m, q_idx, ret, mret = 1, needmore;
 #ifdef macintosh

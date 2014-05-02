@@ -29,7 +29,7 @@ char *lp_pin_auth_begin(lph_t * handle)
 	oreq.qstring_params = NULL;
 
 	oauth_sign(&oreq);
-	send_signed_https(&oreq, &response);
+	https_send(&oreq, &response);
 	oauth_free(&oreq);
 
 	if (response.code == 200) {
@@ -81,7 +81,7 @@ char *lp_pin_auth_finish(lph_t * handle, const char *pin)
 	oreq.qstring_params = NULL;
 
 	oauth_sign(&oreq);
-	send_signed_https(&oreq, &response);
+	https_send(&oreq, &response);
 	oauth_free(&oreq);
 
 	if (response.code == 200) {
@@ -137,7 +137,7 @@ void lp_verify_credentials(lph_t * handle)
 	oreq.qstring_params = NULL;
 
 	oauth_sign(&oreq);
-	send_signed_https(&oreq, &response);
+	https_send(&oreq, &response);
 	oauth_free(&oreq);
 
 	if (response.code == 200) {

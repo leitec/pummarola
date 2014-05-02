@@ -65,7 +65,7 @@ int main(void)
 		printf("\nPummarola: running as %s (@%s)\n\n",
 				lph->name, lph->screen_name);
 
-	lp_get_home_timeline(lph, &tweets);
+	lp_timeline_get_home(lph, &tweets, 5);
 
 	lc_list_foreach(tweets, (lc_foreachfn_t)print_tweet);
 	lc_list_destroy(tweets);
@@ -76,7 +76,10 @@ int main(void)
 
 	printf("\n");
 
-	lp_get_user_timeline(lph, buf);
+	lp_timeline_get_user(lph, &tweets, buf, 5);
+	lc_list_foreach(tweets, (lc_foreachfn_t)print_tweet);
+	lc_list_destroy(tweets);
+
 	libpummarola_destroy(lph);
 	return 0;
 }

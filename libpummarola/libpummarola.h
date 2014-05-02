@@ -52,9 +52,9 @@ typedef struct HttpResponse {
 
 #ifdef LP_SSL_PROXY
 /* also define LP_SSL_PROXY_HOST and LP_SSL_PROXY_PORT */
-#define send_signed_https send_signed_https_proxy
+#define https_send https_send_proxy
 #else
-#define send_signed_https send_signed_https_direct
+#define https_send https_send_direct
 #endif
 
 #include "lp_url.h"

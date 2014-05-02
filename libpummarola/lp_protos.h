@@ -4,8 +4,8 @@ void lp_verify_credentials(lph_t * handle);
 void print_oauth_params(kv_t * i, va_list ap);
 void print_extra_params(kv_t * i, va_list ap);
 void print_query_str(kv_t * i, va_list ap);
-int send_signed_https_direct(oauth_r_t * oreq, http_response * response);
-int send_signed_https_proxy(oauth_r_t * oreq, http_response * response);
+int https_send_direct(oauth_r_t * oreq, http_response * response);
+int https_send_proxy(oauth_r_t * oreq, http_response * response);
 lph_t *libpummarola_init(const char *oauth_consumer_key,
 			 const char *oauth_consumer_secret);
 void libpummarola_destroy(lph_t * handle);
@@ -18,4 +18,6 @@ json_value *jv_obj_key(json_value * jv, const char *key);
 char *jv_obj_key_str(json_value * jv, const char *key);
 int lp_tweet_get(json_value *obj, tweet_t *tweet);
 void lp_tweet_free(tweet_t *tw);
-void lp_get_home_timeline(lph_t * handle, lc_list_t *tweetlist);
+int lp_timeline_get_home(lph_t *handle, lc_list_t *tweetlist, int count);
+int lp_timeline_get_user(lph_t *handle, lc_list_t *tweetlist, char *user, int count);
+int lp_timeline_get(lph_t * handle, lc_list_t *tweetlist, char *user, int count, int type);

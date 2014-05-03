@@ -20,20 +20,21 @@ int main(void)
 	lph = libpummarola_init(OAUTH_CONSUMER_KEY, OAUTH_CONSUMER_SECRET);
 
 	if ((f = fopen("secrets", "r")) == NULL) {
+		printf("Didn't find a secrets file, beginning PIN authentication.\n\n");
 		url = lp_pin_auth_begin(lph);
 		if (url) {
-			printf("*** visit %s to authorize client ***\n", url);
+			printf("Please visit the following URL to authorize:\n%s\n", url);
 			free(url);
 		}
 
-		printf("enter PIN: ");
+		printf("\nEnter PIN: ");
 		fflush(stdout);
-		if (gets(buf) != NULL) {
+		fgets(buf, sizeof(buf), stdin);
+		buf[strlen(buf)-1] = '\0';
+		if (buf[0] != '\0') {
 			url = lp_pin_auth_finish(lph, buf);
 			if (url) {
-				printf
-				    ("*** successfully authorized for user '%s' ***\n",
-				     url);
+				printf ("Successfully authorized user '%s'\n", url);
 				free(url);
 			}
 		}
@@ -65,7 +66,8 @@ int main(void)
 	for (;;) {
 		printf("Pummarola> ");
 		fflush(stdout);
-		gets(buf);
+		fgets(buf, sizeof(buf), stdin);
+		buf[strlen(buf)-1] = '\0';
 
 		if (strncmp(buf, "get ", 4) == 0) {
 			lp_timeline_get_user(lph, &tweets, buf + 4, count);
@@ -87,5 +89,8 @@ int main(void)
 	}
 
 	libpummarola_destroy(lph);
+#ifdef macintosh
+	printf("\nDone.\n");
+#endif
 	return 0;
 }

@@ -2,13 +2,9 @@
 
 #include "oauth_secrets.h"
 
-void
-print_tweet(tweet_t *t)
+void print_tweet(tweet_t * t)
 {
-	printf("\n%s\t%s\n\n%s\n\n",
-			t->name,
-			t->date,
-			t->text);
+	printf("\n%s\t%s\n\n%s\n\n", t->name, t->date, t->text);
 }
 
 int main(void)
@@ -62,30 +58,30 @@ int main(void)
 
 	lp_verify_credentials(lph);
 
-	if(lph->name && lph->screen_name)
+	if (lph->name && lph->screen_name)
 		printf("\nPummarola: running as %s (@%s)\n\n",
-				lph->name, lph->screen_name);
+		       lph->name, lph->screen_name);
 
-	for(;;) {
+	for (;;) {
 		printf("Pummarola> ");
 		fflush(stdout);
 		gets(buf);
 
-		if(strncmp(buf, "get ", 4) == 0) {
-			lp_timeline_get_user(lph, &tweets, buf+4, count);
-			lc_list_foreach(tweets,(lc_foreachfn_t)print_tweet);
+		if (strncmp(buf, "get ", 4) == 0) {
+			lp_timeline_get_user(lph, &tweets, buf + 4, count);
+			lc_list_foreach(tweets, (lc_foreachfn_t) print_tweet);
 			lc_list_destroy(tweets);
-		} else if(strncmp(buf, "home", 4) == 0) {
+		} else if (strncmp(buf, "home", 4) == 0) {
 			lp_timeline_get_home(lph, &tweets, count);
-			lc_list_foreach(tweets,(lc_foreachfn_t)print_tweet);
+			lc_list_foreach(tweets, (lc_foreachfn_t) print_tweet);
 			lc_list_destroy(tweets);
-		} else if(strncmp(buf, "tweet ", 6) == 0) {
-			lp_tweet_send(lph, &tw, buf+6);
+		} else if (strncmp(buf, "tweet ", 6) == 0) {
+			lp_tweet_send(lph, &tw, buf + 6);
 			print_tweet(&tw);
-		} else if(strncmp(buf, "count ", 6) == 0) {
-			count = atoi(buf+6);
+		} else if (strncmp(buf, "count ", 6) == 0) {
+			count = atoi(buf + 6);
 			printf("Count set to %d\n", count);
-		} else if(strncmp(buf, "quit", 4) == 0) {
+		} else if (strncmp(buf, "quit", 4) == 0) {
 			break;
 		}
 	}

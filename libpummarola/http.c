@@ -255,13 +255,13 @@ int https_send_direct(oauth_r_t * oreq, http_response * response)
 				  request, req_size, &q_idx);
 
 	q_idx = -1;
-	if(oreq->body_params) {
+	if (oreq->body_params) {
 		body[0] = '\0';
 		lc_list_foreach_v(oreq->body_params,
-				(lc_foreachfn_v_t) print_query_str,
-				body, body_size, &q_idx);
+				  (lc_foreachfn_v_t) print_query_str,
+				  body, body_size, &q_idx);
 		bptr = body;
-	} else if(oreq->body) {
+	} else if (oreq->body) {
 		bptr = (char *)oreq->body;
 	}
 
@@ -288,7 +288,7 @@ int https_send_direct(oauth_r_t * oreq, http_response * response)
 #endif
 
 	strlcat(request, "\n", req_size);
-	if(bptr)
+	if (bptr)
 		strlcat(request, bptr, req_size);
 
 	if (murl.port)

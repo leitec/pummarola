@@ -84,9 +84,9 @@ void libpummarola_destroy(lph_t * handle)
 #ifdef macintosh
 	mactcp_shutdown(&mi);
 #endif
-	if(handle->screen_name)
+	if (handle->screen_name)
 		free(handle->screen_name);
-	if(handle->name)
+	if (handle->name)
 		free(handle->name);
 
 	free(handle);

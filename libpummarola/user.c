@@ -12,17 +12,19 @@ enum {
 	TIMELINE_USER
 };
 
-int lp_timeline_get_home(lph_t *handle, lc_list_t *tweetlist, int count)
+int lp_timeline_get_home(lph_t * handle, lc_list_t * tweetlist, int count)
 {
 	return lp_timeline_get(handle, tweetlist, NULL, count, TIMELINE_HOME);
 }
 
-int lp_timeline_get_user(lph_t *handle, lc_list_t *tweetlist, char *user, int count)
+int lp_timeline_get_user(lph_t * handle, lc_list_t * tweetlist, char *user,
+			 int count)
 {
 	return lp_timeline_get(handle, tweetlist, user, count, TIMELINE_USER);
 }
 
-int lp_timeline_get(lph_t * handle, lc_list_t *tweetlist, char *user, int count, int type)
+int lp_timeline_get(lph_t * handle, lc_list_t * tweetlist, char *user,
+		    int count, int type)
 {
 	lc_list_t oauth_plist, qstring_plist, twl;
 	http_response response;
@@ -40,7 +42,7 @@ int lp_timeline_get(lph_t * handle, lc_list_t *tweetlist, char *user, int count,
 
 	snprintf(numbuf, sizeof(numbuf), "%d", count);
 
-	if(type == TIMELINE_HOME) {
+	if (type == TIMELINE_HOME) {
 		INSERT_KV_T(qstring_plist, "count", numbuf);
 	} else {
 		INSERT_KV_T(qstring_plist, "screen_name", user);
@@ -57,7 +59,7 @@ int lp_timeline_get(lph_t * handle, lc_list_t *tweetlist, char *user, int count,
 	oreq.oauth_params = oauth_plist;
 	oreq.qstring_params = qstring_plist;
 
-	if(type == TIMELINE_HOME)
+	if (type == TIMELINE_HOME)
 		oreq.url = HOME_TIMELINE_URL;
 	else
 		oreq.url = USER_TIMELINE_URL;
@@ -81,8 +83,10 @@ int lp_timeline_get(lph_t * handle, lc_list_t *tweetlist, char *user, int count,
 		goto jexit;
 	}
 
-	twl = lc_list_create((lc_createfn_t)NULL, (lc_destroyfn_t)lpi_tweet_free,
-		(lc_comparefn_t)NULL);
+	twl =
+	    lc_list_create((lc_createfn_t) NULL,
+			   (lc_destroyfn_t) lpi_tweet_free,
+			   (lc_comparefn_t) NULL);
 
 	/* 
 	 * parse through a list of tweets.
@@ -98,7 +102,7 @@ int lp_timeline_get(lph_t * handle, lc_list_t *tweetlist, char *user, int count,
 	for (i = 0; i < jv->u.array.length; i++) {
 		tw = malloc(sizeof(tweet_t));
 		lpi_tweet_get(jv->u.array.values[i], tw);
-		lc_list_insertlast(twl, (lc_item_t)tw);
+		lc_list_insertlast(twl, (lc_item_t) tw);
 	}
 
 	*tweetlist = twl;

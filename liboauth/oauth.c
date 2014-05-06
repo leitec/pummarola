@@ -159,13 +159,11 @@ lc_list_t oauth_prepare(oauth_s_t * s)
 			random[x] = rand() % 256;
 
 		buflen = sizeof(buffer);
-		if (base64_encode((unsigned char *)buffer, &buflen, random, 32)
-		    == 0) {
+		if (base64_encode((unsigned char *)buffer, &buflen,
+					random, 32) == 0) {
 			nonce = malloc(buflen + 1);
 			for (p = buffer, d = nonce; *p; p++)
-				if ((*p >= '0' && *p <= '9') ||
-				    (*p >= 'A' && *p <= 'Z') ||
-				    (*p >= 'a' && *p <= 'z'))
+				if (isalnum(*p))
 					*(d++) = *p;
 
 			*(d++) = 0;

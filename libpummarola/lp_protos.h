@@ -13,7 +13,6 @@ void json_show(json_value * mjv, int it);
 void lp_get_user_timeline(lph_t * handle, char *user);
 int url_parse(const char *url, url_t * components);
 void url_free(url_t *);
-static inline int url_char(uint8_t * state, const char ch);
 json_value *jv_obj_key(json_value * jv, const char *key);
 char *jv_obj_key_str(json_value * jv, const char *key);
 int lpi_tweet_get(json_value * obj, tweet_t * tweet);

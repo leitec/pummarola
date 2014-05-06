@@ -89,6 +89,8 @@ uint8_t state_table[] = {
 /* qstr */ 0x86, 0x86, 0x86, 0x86, 0xff, 0x17, 0x00, 0x00
 };
 
+static inline int url_char(uint8_t * state, const char ch);
+
 static inline int url_char(uint8_t * state, const char ch)
 {
 	int class;

@@ -10,8 +10,9 @@ int lpi_tweet_get(json_value * obj, tweet_t * tw)
 
 	sub = jv_obj_key(obj, "user");
 	if (sub) {
-		tw->name = strdup(jv_obj_key_str(sub, "name"));
-		tw->screen_name = strdup(jv_obj_key_str(sub, "screen_name"));
+		tw->user.name = strdup(jv_obj_key_str(sub, "name"));
+		tw->user.screen_name = strdup(jv_obj_key_str(sub, "screen_name"));
+		tw->user.description = strdup(jv_obj_key_str(sub, "description"));
 	} else {
 		return -1;
 	}
@@ -24,10 +25,12 @@ int lpi_tweet_get(json_value * obj, tweet_t * tw)
 
 void lpi_tweet_free(tweet_t * tw)
 {
-	if (tw->name)
-		free(tw->name);
-	if (tw->screen_name)
-		free(tw->screen_name);
+	if (tw->user.name)
+		free(tw->user.name);
+	if (tw->user.screen_name)
+		free(tw->user.screen_name);
+	if (tw->user.description)
+		free(tw->user.description);
 	if (tw->text)
 		free(tw->text);
 	if (tw->date)

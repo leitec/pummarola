@@ -4,7 +4,7 @@
 
 void print_tweet(tweet_t * t)
 {
-	printf("\n%s\t%s\n\n%s\n\n", t->name, t->date, t->text);
+	printf("\n** %s\t%s\n\n%s\n\n", t->user.name, t->date, t->text);
 }
 
 int main(void)
@@ -15,7 +15,7 @@ int main(void)
 	FILE *f;
 	int count = 5;
 	lc_list_t tweets;
-	tweet_t tw;
+	tweet_t tw, *twp;
 
 	lph = libpummarola_init(OAUTH_CONSUMER_KEY, OAUTH_CONSUMER_SECRET);
 
@@ -71,6 +71,15 @@ int main(void)
 
 		if (strncmp(buf, "get ", 4) == 0) {
 			lp_timeline_get_user(lph, &tweets, buf + 4, count);
+
+			twp = (tweet_t *) LC_LIST_FIRST(tweets);
+			printf("\n\n@%s\t%s\n", twp->user.screen_name,
+					twp->user.name);
+			if(strlen(twp->user.description))
+				printf("\n%s\n", twp->user.description);
+
+			printf("\n");
+
 			lc_list_foreach(tweets, (lc_foreachfn_t) print_tweet);
 			lc_list_destroy(tweets);
 		} else if (strncmp(buf, "home", 4) == 0) {

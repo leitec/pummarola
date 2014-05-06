@@ -31,9 +31,14 @@ typedef struct libPummarolaHandle {
 	int user_id;
 } lph_t;
 
-typedef struct libPummarolaTweet {
+typedef struct libPummarolaUser {
 	char *name;
 	char *screen_name;
+	char *description;
+} lpuser_t;
+
+typedef struct libPummarolaTweet {
+	lpuser_t user;
 	char *text;
 	char *date;
 } tweet_t;

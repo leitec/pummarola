@@ -26,6 +26,7 @@ lc_node_t lc_list_insert_ordered(lc_list_t list, lc_item_t newitem);
 void lc_list_foreach(lc_list_t list, lc_foreachfn_t foreachfn);
 void lc_list_foreach_v(lc_list_t list, lc_foreachfn_v_t foreachfn_v, ...);
 void lc_list_foreach_rev(lc_list_t list, lc_foreachfn_t foreachfn);
+void lc_list_foreach_rev_v(lc_list_t list, lc_foreachfn_v_t foreachfn_v, ...);
 lc_size_t lc_list_getsize(lc_list_t list);
 void lc_md5_init(lc_md5state_t * state);
 void lc_md5_append(lc_md5state_t * state, lc_md5byte_t * message,

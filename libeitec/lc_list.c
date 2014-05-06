@@ -383,6 +383,21 @@ void lc_list_foreach_rev(lc_list_t list, lc_foreachfn_t foreachfn)
 }
 
 /* PROTO */
+void lc_list_foreach_rev_v(lc_list_t list, lc_foreachfn_v_t foreachfn_v, ...)
+{
+	lc_node_t trav;
+	va_list ap;
+
+	va_start(ap, foreachfn_v);
+
+	for (trav = list->tail; trav != NULL; trav = trav->prev)
+		foreachfn_v(trav->item, ap);
+
+	va_end(ap);
+}
+
+
+/* PROTO */
 lc_size_t lc_list_getsize(lc_list_t list)
 {
 	return list->size;

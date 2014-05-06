@@ -4,7 +4,7 @@
 
 void print_tweet(tweet_t * t)
 {
-	printf("\n** %s\t%s\n\n%s\n\n", t->user.name, t->date, t->text);
+	printf("\n== %s == %s ==\n\n%s\n\n", t->user.name, t->date, t->text);
 }
 
 int main(void)
@@ -83,11 +83,11 @@ int main(void)
 
 			printf("\n");
 
-			lc_list_foreach(tweets, (lc_foreachfn_t) print_tweet);
+			lc_list_foreach_rev(tweets, (lc_foreachfn_t) print_tweet);
 			lc_list_destroy(tweets);
 		} else if (strncmp(buf, "home", 4) == 0) {
 			lp_timeline_get_home(lph, &tweets, count);
-			lc_list_foreach(tweets, (lc_foreachfn_t) print_tweet);
+			lc_list_foreach_rev(tweets, (lc_foreachfn_t) print_tweet);
 			lc_list_destroy(tweets);
 		} else if (strncmp(buf, "tweet ", 6) == 0) {
 			lp_tweet_send(lph, &tw, buf + 6);

@@ -99,8 +99,8 @@ char *lp_pin_auth_finish(lph_t * handle, const char *pin)
 
 		sn = FIND_KEY(qstring_plist, "screen_name");
 		if (sn) {
-			handle->screen_name = strdup(sn->value);
-			retname = handle->screen_name;
+			handle->me.screen_name = strdup(sn->value);
+			retname = handle->me.screen_name;
 		}
 		uid = FIND_KEY(qstring_plist, "user_id");
 		if (uid)
@@ -151,8 +151,9 @@ void lp_verify_credentials(lph_t * handle)
 			goto jexit;
 		}
 
-		handle->name = strdup(jv_obj_key_str(jv, "name"));
-		handle->screen_name = strdup(jv_obj_key_str(jv, "screen_name"));
+		handle->me.name = strdup(jv_obj_key_str(jv, "name"));
+		handle->me.screen_name = strdup(jv_obj_key_str(jv, "screen_name"));
+		handle->me.description = strdup(jv_obj_key_str(jv, "description"));
 	}
 
  jexit:

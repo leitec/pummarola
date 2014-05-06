@@ -59,9 +59,12 @@ int main(void)
 
 	lp_verify_credentials(lph);
 
-	if (lph->name && lph->screen_name)
-		printf("\nPummarola: running as %s (@%s)\n\n",
-		       lph->name, lph->screen_name);
+	if (lph->me.name && lph->me.screen_name)
+		printf("\n%s (@%s)\n\n",
+		       lph->me.name, lph->me.screen_name);
+	if (lph->me.description)
+		if(strlen(lph->me.description) > 0)
+			printf("%s\n\n", lph->me.description);
 
 	for (;;) {
 		printf("Pummarola> ");
@@ -73,8 +76,8 @@ int main(void)
 			lp_timeline_get_user(lph, &tweets, buf + 4, count);
 
 			twp = (tweet_t *) LC_LIST_FIRST(tweets);
-			printf("\n\n@%s\t%s\n", twp->user.screen_name,
-					twp->user.name);
+			printf("\n\n%s (@%s)\n", twp->user.name,
+					twp->user.screen_name);
 			if(strlen(twp->user.description))
 				printf("\n%s\n", twp->user.description);
 

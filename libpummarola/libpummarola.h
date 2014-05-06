@@ -16,6 +16,12 @@
 
 #include <json-parser/json.h>
 
+typedef struct libPummarolaUser {
+	char *name;
+	char *screen_name;
+	char *description;
+} lpuser_t;
+
 typedef struct libPummarolaHandle {
 #ifdef macintosh
 	/* going to make mactcp_inst a global */
@@ -23,19 +29,11 @@ typedef struct libPummarolaHandle {
 #else
 	int sock;
 #endif
-
 	oauth_s_t *ostate;
 
-	char *screen_name;
-	char *name;
+	lpuser_t me;
 	int user_id;
 } lph_t;
-
-typedef struct libPummarolaUser {
-	char *name;
-	char *screen_name;
-	char *description;
-} lpuser_t;
 
 typedef struct libPummarolaTweet {
 	lpuser_t user;

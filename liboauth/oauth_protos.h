@@ -21,6 +21,6 @@ void make_param_str(lc_item_t * i, va_list ap);
 void make_query_str(kv_t * i, va_list ap);
 void make_oauth_header(kv_t * i, va_list ap);
 int oauth_sign(oauth_r_t * oreq);
-char *urlencode(unsigned char *original, size_t origlen);
+char *urlencode(const unsigned char *original, size_t origlen);
 unsigned char *urldecode(const char *encoded);
 lc_list_t param_list_from_qstring(const char *qstring);

@@ -3,21 +3,18 @@
 static inline unsigned long decode_hex_char(const char *);
 
 /* PROTO */
-char *urlencode(unsigned char *original, size_t origlen)
+char *urlencode(const unsigned char *original, size_t origlen)
 {
-	unsigned char *pp;
+	const unsigned char *pp;
 	char *nn, *encoded;
 	size_t len;
 
 	for (len = 0, pp = original; pp < original + origlen; pp++) {
-		if (!((*pp >= '0' && *pp <= '9') ||
-		      (*pp >= 'A' && *pp <= 'Z') ||
-		      (*pp >= 'a' && *pp <= 'z') ||
-		      *pp == '-' || *pp == '_' || *pp == '.' || *pp == '~')) {
-			len += 3;
-		} else {
+		if(isalnum(*pp) || *pp == '-' || *pp == '_'
+				|| *pp == '.' || *pp == '~')
 			len += 1;
-		}
+		else
+			len += 3;
 	}
 
 	encoded = malloc(len + 1);
@@ -25,16 +22,12 @@ char *urlencode(unsigned char *original, size_t origlen)
 		nn = encoded;
 
 		for (pp = original; pp < original + origlen; pp++) {
-			if (!((*pp >= '0' && *pp <= '9') ||
-			      (*pp >= 'A' && *pp <= 'Z') ||
-			      (*pp >= 'a' && *pp <= 'z') ||
-			      *pp == '-' || *pp == '_' ||
-			      *pp == '.' || *pp == '~')) {
+			if (isalnum(*pp) || *pp == '-' || *pp == '_'
+					 || *pp == '.' || *pp == '~') {
+				*(nn++) = *pp;
+			} else {
 				snprintf((char *)nn, 4, "%%%02X", *pp);
 				nn += 3;
-			} else {
-				*nn = *pp;
-				nn++;
 			}
 		}
 

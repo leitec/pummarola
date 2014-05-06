@@ -57,4 +57,5 @@ typedef struct LC_List {
 
 #define LC_LIST_HEAD(x) x->head
 #define LC_LIST_TAIL(x) x->tail
+#define LC_LIST_FIRST(x) x->head->item
 #endif

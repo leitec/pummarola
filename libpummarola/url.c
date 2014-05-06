@@ -96,7 +96,7 @@ static inline int url_char(uint8_t * state, const char ch)
 	int class;
 	uint8_t *newstate;
 
-	if (ch >= '0' && ch <= '9')
+	if (isdigit(ch))
 		class = 1;
 	else if (ch == ':')
 		class = 2;

@@ -42,11 +42,10 @@ int lp_timeline_get(lph_t * handle, lc_list_t * tweetlist, char *user,
 
 	snprintf(numbuf, sizeof(numbuf), "%d", count);
 
-	if (type == TIMELINE_HOME) {
-		INSERT_KV_T(qstring_plist, "count", numbuf);
-	} else {
+	INSERT_KV_T(qstring_plist, "count", numbuf);
+
+	if (type == TIMELINE_USER) {
 		INSERT_KV_T(qstring_plist, "screen_name", user);
-		INSERT_KV_T(qstring_plist, "count", numbuf);
 		INSERT_KV_T(qstring_plist, "include_rts", "true");
 	}
 

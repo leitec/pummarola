@@ -1,7 +1,7 @@
 pummarola
 =========
 
-Pummarola is a Twitter client for old Macs. Requires a 68020 or higher, and System 7 or higher. It also compiles and runs from Linux, OS X and other UNIX-ish OSs.
+Pummarola is a Twitter client for old Macs. Requires a 68020 or higher, and System 7 or higher. It also compiles and runs from Linux, OS X, A/UX and other UNIX-ish OSs.
 
 Status
 ------
@@ -36,7 +36,7 @@ The client only includes a very rudimentary command line interface.
     
 **Important:** in MacOS, always use `quit` to exit. If you exit by closing the window, MacTCP will be left in an unstable state. There is no quit message; after you type quit, it is done and you can close the window.
 
-An accurate clock is necessary. OAuth requires the request's timestamp to be within a small tolerance, so make sure to set the clock on your machine via network time. On System 7 I use Vremya for NTP with good results.
+An accurate clock is necessary. OAuth requires the request's timestamp to be within a small tolerance, so make sure to set the clock on your machine via network time. On System 7 I use Vremya for NTP with good results. Due to the way the UNIX timestamp is calculated, the time zone must be accurately set as well. See `time.c` in `libcompat` for implementation details.
 
 **Authentication:** when first run, Pummarola will print a long URL. This has to be entered in a sufficiently modern browser that can log into Twitter. Last year I used Classilla, but it may have changed since then. While tedious, the best option is to enter manually on another computer. You will have to authorize Pummarola to access your account, and will get a PIN. Enter this PIN into Pummarola. It will create a file `secrets` in the folder. You can move this file around, but as the name implies it contains the necessary details to access your account, so be careful.
 

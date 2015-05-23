@@ -210,12 +210,8 @@ int url_parse(const char *url, url_t * components)
 /* PROTO */
 void url_free(url_t * url)
 {
-	if (url->protocol)
-		free(url->protocol);
-	if (url->hostname)
-		free(url->hostname);
-	if (url->path)
-		free(url->path);
-	if (url->query_string)
-		free(url->query_string);
+	free(url->protocol);
+	free(url->hostname);
+	free(url->path);
+	free(url->query_string);
 }

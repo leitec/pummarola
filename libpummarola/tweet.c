@@ -25,16 +25,11 @@ int lpi_tweet_get(json_value * obj, tweet_t * tw)
 
 void lpi_tweet_free(tweet_t * tw)
 {
-	if (tw->user.name)
-		free(tw->user.name);
-	if (tw->user.screen_name)
-		free(tw->user.screen_name);
-	if (tw->user.description)
-		free(tw->user.description);
-	if (tw->text)
-		free(tw->text);
-	if (tw->date)
-		free(tw->date);
+	free(tw->user.name);
+	free(tw->user.screen_name);
+	free(tw->user.description);
+	free(tw->text);
+	free(tw->date);
 
 	free(tw);
 }

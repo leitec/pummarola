@@ -26,17 +26,11 @@ oauth_s_t *oauth_init(int version, int sig_method, char *oauth_consumer_key,
 /* PROTO */
 void oauth_destroy(oauth_s_t * state)
 {
-	if (state->oauth_consumer_key != NULL)
-		free(state->oauth_consumer_key);
-	if (state->oauth_consumer_secret != NULL)
-		free(state->oauth_consumer_secret);
-	if (state->oauth_token != NULL)
-		free(state->oauth_token);
-	if (state->oauth_token_secret != NULL)
-		free(state->oauth_token_secret);
-	if (state->signing_key != NULL)
-		free(state->signing_key);
-
+	free(state->oauth_consumer_key);
+	free(state->oauth_consumer_secret);
+	free(state->oauth_token);
+	free(state->oauth_token_secret);
+	free(state->signing_key);
 	free(state);
 }
 
@@ -56,10 +50,8 @@ void oauth_free(oauth_r_t * req)
 /* PROTO */
 int oauth_set_token(oauth_s_t * s, char *oauth_token, char *oauth_token_secret)
 {
-	if (s->oauth_token != NULL)
-		free(s->oauth_token);
-	if (s->oauth_token_secret != NULL)
-		free(s->oauth_token_secret);
+	free(s->oauth_token);
+	free(s->oauth_token_secret);
 
 	s->oauth_token = strdup(oauth_token);
 	if (s->oauth_token == NULL)
@@ -69,8 +61,7 @@ int oauth_set_token(oauth_s_t * s, char *oauth_token, char *oauth_token_secret)
 	if (s->oauth_token_secret == NULL)
 		return 0;
 
-	if (s->signing_key != NULL)
-		free(s->signing_key);
+	free(s->signing_key);
 
 	s->signing_key = malloc(strlen(s->oauth_consumer_secret) + 1 +
 				strlen(oauth_token_secret) + 1);
